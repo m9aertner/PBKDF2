@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<project name="PBKDF2" default="clean-all">
+
+	<property name="version" value="1.0.4" />
+
+	<property name="jboss.server" value="C:/Server/jboss-3.0.8_tomcat-4.1.24/server/default" />
+
+	<available file="${jboss.server}/lib/jbosssx.jar" property="jbosssx-available" />
+
+	<available file="${jboss.server}/lib" type="dir" property="lib-available" />
+
+	<target name="init">
+		<mkdir dir="classes" />
+		<mkdir dir="dist" />
+	</target>
+
+	<target name="clean">
+		<delete dir="classes" />
+	</target>
+
+	<target name="clean-all" depends="clean,PBKDF2,SaltedDBLogin" />
+
+	<target name="PBKDF2" depends="PBKDF2-compile,PBKDF2-src.zip,PBKDF2-jar,PBKDF2-doc" />
+
+	<target name="SaltedDBLogin" depends="PBKDF2-jar,SaltedDBLogin-jar,PBKDF2-doc" />
+
+	<target name="PBKDF2-jar" depends="PBKDF2-compile">
+		<jar destfile="dist/PBKDF2-${version}.jar" manifest="conf/PBKDF2.MF">
+			<fileset dir="classes">
+				<include name="de/rtner/security/auth/spi/PBKDF2*.class" />
+				<include name="de/rtner/security/auth/spi/PRF.class" />
+				<include name="de/rtner/security/auth/spi/MacBasedPRF.class" />
+				<include name="de/rtner/misc/BinTools.class" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="PBKDF2-compile" depends="init">
+		<javac srcdir="src" destdir="classes">
+			<include name="de/rtner/security/auth/spi/PBKDF2*.java" />
+			<include name="de/rtner/security/auth/spi/PRF.java" />
+			<include name="de/rtner/security/auth/spi/MacBasedPRF.java" />
+			<include name="de/rtner/misc/BinTools.java" />
+		</javac>
+	</target>
+
+	<target name="PBKDF2-doc">
+		<delete dir="./doc/api" />
+		<mkdir dir="./doc/api" />
+		<javadoc destdir="./doc/api" packagenames="*" author="true" private="true" version="true" windowtitle="${project.title} API Documentation" doctitle="&lt;h1&gt;PBKDF2 Documentation (Version ${project.version})&lt;/h1&gt;" bottom="Copyright &#169; 2007 Matthias G&amp;auml;rtner">
+			<fileset dir="src">
+				<include name="de/rtner/security/auth/spi/Salted*.java" />
+				<include name="de/rtner/security/auth/spi/PBKDF2*.java" />
+				<include name="de/rtner/security/auth/spi/PRF.java" />
+				<include name="de/rtner/security/auth/spi/MacBasedPRF.java" />
+				<include name="de/rtner/misc/BinTools.java" />
+			</fileset>
+			<classpath>
+				<pathelement location="${jboss.server}/lib/jbosssx.jar" />
+			</classpath>
+		</javadoc>
+	</target>
+
+	<target name="PBKDF2-src.zip">
+		<zip zipfile="dist/PBKDF2-${version}-src.zip">
+			<fileset dir=".">
+				<include name="src/de/rtner/security/auth/spi/Salted*.java" />
+				<include name="src/de/rtner/security/auth/spi/PBKDF2*.java" />
+				<include name="src/de/rtner/security/auth/spi/PRF.java" />
+				<include name="src/de/rtner/security/auth/spi/MacBasedPRF.java" />
+				<include name="src/de/rtner/misc/BinTools.java" />
+				<include name="doc/**/*.*" />
+				<include name="conf/*.*" />
+				<include name="build.xml" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="SaltedDBLogin-jar" depends="SaltedDBLogin-compile">
+		<jar destfile="dist/SaltedDatabaseLoginModule-${version}.jar" manifest="conf/SaltedDatabaseLoginModule.MF">
+			<fileset dir="classes">
+				<include name="de/rtner/security/auth/spi/Salted*.class" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="SaltedDBLogin-compile" depends="PBKDF2-jar">
+		<fail message="Required file ${jboss.server}/lib/jbosssx.jar not available. Please check jboss.server property." unless="jbosssx-available" />
+		<javac srcdir="src" destdir="classes">
+			<include name="de/rtner/security/auth/spi/Salted*.java" />
+			<classpath>
+				<pathelement location="${jboss.server}/lib/jbosssx.jar" />
+				<pathelement location="PBKDF2-${version}.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="deploy" depends="SaltedDBLogin-jar">
+		<fail message="Required directory ${jboss.server}/lib not available. Please check jboss.server property." unless="lib-available" />
+		<copy file="dist/PBKDF2-${version}.jar" todir="${jboss.server}/lib" />
+		<copy file="dist/SaltedDatabaseLoginModule-${version}.jar" todir="${jboss.server}/lib" />
+		<echo>Please note that a JBoss server restart is required to make JBoss (re-)load the modules.</echo>
+	</target>
+
+</project>
