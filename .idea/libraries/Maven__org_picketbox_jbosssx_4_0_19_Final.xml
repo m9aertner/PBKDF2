@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.picketbox:jbosssx:4.0.19.Final">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/picketbox/jbosssx/4.0.19.Final/jbosssx-4.0.19.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/picketbox/jbosssx/4.0.19.Final/jbosssx-4.0.19.Final-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/picketbox/jbosssx/4.0.19.Final/jbosssx-4.0.19.Final-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
