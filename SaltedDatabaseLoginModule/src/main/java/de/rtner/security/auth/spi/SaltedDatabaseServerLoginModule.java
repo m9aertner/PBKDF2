@@ -11,12 +11,12 @@ import org.jboss.security.auth.spi.DatabaseServerLoginModule;
  * A JBoss JDBC based login module that supports authentication, role mapping
  * and salted iterated password hashing. Database connection and SQL are
  * inherited from DatabaseServerLoginModule.
- * 
+ * <p>
  * Actual check is deferred to pluggable cryptographic module.
- * 
+ * <p>
  * Format of password depends on formatter. Default PBKDF2HexFormmater's format
  * is: Salt(Hex):Iteration Count(decimal):hashed password(Hex)
- * 
+ * <p>
  * <hr />
  * <p>
  * A free Java implementation of Password Based Key Derivation Function 2 as
@@ -43,13 +43,17 @@ import org.jboss.security.auth.spi.DatabaseServerLoginModule;
  * For Details, see <a
  * href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a>.
  * </p>
- * 
+ *
  * @author Matthias G&auml;rtner
- * @see org.jboss.security.auth.spi.DatabaseServerLoginModule
  * @version 1.0.4
+ * @see org.jboss.security.auth.spi.DatabaseServerLoginModule
  */
-public class SaltedDatabaseServerLoginModule extends DatabaseServerLoginModule
-{
+public class SaltedDatabaseServerLoginModule extends DatabaseServerLoginModule {
+    private static final String[] ALL_VALID_OPTIONS =
+            {
+                    "HMACALGORITHM", "FORMATTER", "ENGINE", "ENGINE-PARAMETERS"
+            };
+
     /**
      * The default formatter to use if not specified as a property.
      */
@@ -79,7 +83,7 @@ public class SaltedDatabaseServerLoginModule extends DatabaseServerLoginModule
 
     /**
      * Class name of formatter to use.
-     * 
+     *
      * @see de.rtner.security.auth.spi.PBKDF2Formatter
      * @see de.rtner.security.auth.spi.PBKDF2HexFormatter
      */
@@ -94,14 +98,14 @@ public class SaltedDatabaseServerLoginModule extends DatabaseServerLoginModule
 
     /**
      * Class name of PBKDF2 engine to use.
-     * 
+     *
      * @see de.rtner.security.auth.spi.PBKDF2
      */
     protected String engineClassName = null;
 
     /**
      * Class name of PBKDF2 engine parameters to use.
-     * 
+     *
      * @see de.rtner.security.auth.spi.PBKDF2Parameters
      */
     protected String parameterClassName = null;
@@ -109,35 +113,32 @@ public class SaltedDatabaseServerLoginModule extends DatabaseServerLoginModule
     /**
      */
     public void initialize(Subject subject, CallbackHandler callbackHandler,
-            Map sharedState, Map options)
-    {
+                           Map sharedState, Map options) {
         super.initialize(subject, callbackHandler, sharedState, options);
+
+        addValidOptions(ALL_VALID_OPTIONS);
 
         // Too bad that we have to duplicate code from
         // UsernamePasswordLoginModule:
         // base class members are private with no accessors (!#@&)
         hashAlgorithm = (String) options.get("hmacAlgorithm");
-        if (hashAlgorithm == null)
-        {
+        if (hashAlgorithm == null) {
             hashAlgorithm = "HMacSHA1";
         }
         hashCharset = (String) options.get("hashCharset");
 
         formatterClassName = (String) options.get("formatter");
-        if (formatterClassName == null)
-        {
+        if (formatterClassName == null) {
             formatterClassName = DEFAULT_FORMATTER;
         }
 
         engineClassName = (String) options.get("engine");
-        if (engineClassName == null)
-        {
+        if (engineClassName == null) {
             engineClassName = DEFAULT_ENGINE;
         }
 
         parameterClassName = (String) options.get("engine-parameters");
-        if (parameterClassName == null)
-        {
+        if (parameterClassName == null) {
             parameterClassName = DEFAULT_PARAMETER;
         }
 
@@ -146,14 +147,11 @@ public class SaltedDatabaseServerLoginModule extends DatabaseServerLoginModule
     /**
      * We just return the password unchanged. It will be decoded/hashed in
      * validatePassword.
-     * 
-     * @param username
-     *            ignored in default version
-     * @param password
-     *            the password string to be hashed
+     *
+     * @param username ignored in default version
+     * @param password the password string to be hashed
      */
-    protected String createPasswordHash(String username, String password)
-    {
+    protected String createPasswordHash(String username, String password) {
         return password;
     }
 
@@ -162,28 +160,23 @@ public class SaltedDatabaseServerLoginModule extends DatabaseServerLoginModule
      * 'password', then compute candidate derived key from user-supplied
      * password and parameters, then compare database derived key and candidate
      * derived key. Login if match.
-     * 
-     * @param inputPassword
-     *            Password that was supplied by user (candidate password)
-     * @param expectedPassword
-     *            Actually the encoded PBKDF2 string which contains the
-     *            expected/reference password implicitly. Not a clear-text
-     *            password. Parameter is named like this because of inherited
-     *            method parameter name.
+     *
+     * @param inputPassword    Password that was supplied by user (candidate password)
+     * @param expectedPassword Actually the encoded PBKDF2 string which contains the
+     *                         expected/reference password implicitly. Not a clear-text
+     *                         password. Parameter is named like this because of inherited
+     *                         method parameter name.
      * @return true if the inputPassword is valid, false otherwise.
      */
     protected boolean validatePassword(String inputPassword,
-            String expectedPassword)
-    {
-        if (inputPassword == null || expectedPassword == null)
-        {
+                                       String expectedPassword) {
+        if (inputPassword == null || expectedPassword == null) {
             return false;
         }
 
         PBKDF2Parameters p = getEngineParameters();
         PBKDF2Formatter f = getFormatter();
-        if (f.fromString(p, expectedPassword))
-        {
+        if (f.fromString(p, expectedPassword)) {
             return false;
         }
         PBKDF2 pBKDF2Engine = getEngine(p);
@@ -194,26 +187,21 @@ public class SaltedDatabaseServerLoginModule extends DatabaseServerLoginModule
     /**
      * Factory method: instantiate the PBKDF2 engine parameters. Override or
      * change the class via attribute.
-     * 
+     *
      * @return Engine parameter object, initialized.
      */
-    protected PBKDF2Parameters getEngineParameters()
-    {
+    protected PBKDF2Parameters getEngineParameters() {
         PBKDF2Parameters p = null;
-        try
-        {
+        try {
             p = (PBKDF2Parameters) Class.forName(parameterClassName)
                     .newInstance();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new IllegalArgumentException(
                     "Unable to instantiate implementation class ("
                             + parameterClassName + ")");
         }
         p.setHashAlgorithm(hashAlgorithm);
-        if (hashCharset != null)
-        {
+        if (hashCharset != null) {
             p.setHashCharset(hashCharset);
         }
         return p;
@@ -222,19 +210,15 @@ public class SaltedDatabaseServerLoginModule extends DatabaseServerLoginModule
     /**
      * Factory method: instantiate the PBKDF2 engine. Override or change the
      * class via attribute.
-     * 
+     *
      * @param parameters
      * @return Engine object
      */
-    protected PBKDF2 getEngine(PBKDF2Parameters parameters)
-    {
+    protected PBKDF2 getEngine(PBKDF2Parameters parameters) {
         PBKDF2 engine = null;
-        try
-        {
+        try {
             engine = (PBKDF2) Class.forName(engineClassName).newInstance();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new IllegalArgumentException(
                     "Unable to instantiate implementation class ("
                             + engineClassName + ")");
@@ -246,20 +230,15 @@ public class SaltedDatabaseServerLoginModule extends DatabaseServerLoginModule
     /**
      * Factory method: instantiate the PBKDF2 formatter. Override or change the
      * class via attribute.
-     * 
+     *
      * @return Engine formatter
      */
-    protected PBKDF2Formatter getFormatter()
-    {
-        if (formatter == null)
-        {
-            try
-            {
+    protected PBKDF2Formatter getFormatter() {
+        if (formatter == null) {
+            try {
                 formatter = (PBKDF2Formatter) Class.forName(formatterClassName)
                         .newInstance();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 throw new IllegalArgumentException(
                         "Unable to instantiate implementation class ("
                                 + formatterClassName + ")");
