@@ -1,11 +1,10 @@
 package de.rtner.security.auth.spi;
 
-import java.util.Map;
+import org.jboss.security.auth.spi.DatabaseServerLoginModule;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
-
-import org.jboss.security.auth.spi.DatabaseServerLoginModule;
+import java.util.Map;
 
 /**
  * A JBoss JDBC based login module that supports authentication, role mapping
@@ -51,7 +50,7 @@ import org.jboss.security.auth.spi.DatabaseServerLoginModule;
 public class SaltedDatabaseServerLoginModule extends DatabaseServerLoginModule {
     private static final String[] ALL_VALID_OPTIONS =
             {
-                    "HMACALGORITHM", "FORMATTER", "ENGINE", "ENGINE-PARAMETERS"
+                    "HMACALGORITHM", "FORMATTER", "ENGINE", "ENGINE-PARAMETERS", "hmacAlgorithm", "formatter", "engine", "engine-parameters"
             };
 
     /**
