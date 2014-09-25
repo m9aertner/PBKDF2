@@ -1,6 +1,7 @@
 package de.rtner.security.auth.spi;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 import org.junit.Test;
 
@@ -28,7 +29,8 @@ public class PBKDF2EngineTest {
 
 	@Test
 	public void testRFC6070_4() {
-		// Note: this takes multiple seconds. On my (cheap) machine, nearly 30 seconds. 
+		// Note: this takes multiple seconds. On my (cheap) machine, nearly 30 seconds.
+		assumeTrue("true".equals(System.getProperty("pbkdf2.run.lengthy.test")));
 		decodeAndCheck("password", "73616C74:16777216:eefe3d61cd4da4e4e9945b3d6ba2158c2634e984");
 	}
 

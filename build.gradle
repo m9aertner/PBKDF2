@@ -1,0 +1,107 @@
+// Gradle Build File
+// http://www.gradle.org
+//
+// For details on uploading to central, see Yennick Trevels excellent write-up at 
+// http://yennicktrevels.com/blog/2013/10/11/automated-gradle-project-deployment-to-sonatype-oss-repository/
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+group = 'de.rtner'
+sourceCompatibility = 1.5
+version = '1.0.5'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'de.rtner.PBKDF2',
+                   'Implementation-Version': version,
+                   'Main-Class': 'de.rtner.security.auth.spi.PBKDF2Engine',
+                   'url': 'http://www.rtner.de/software/PBKDF2.html'
+    }
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives jar
+
+    archives javadocJar
+    archives sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+              authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+
+            pom.project {
+               name 'PBKDF2'
+               packaging 'jar'
+               description 'A free Java implementation of RFC 2898 / PKCS#5 PBKDF2'
+               url 'http://www.rtner.de/software/PBKDF2.html'
+
+               scm {
+                   url 'git@github.com:m9aertner/PBKDF2.git'
+                   connection 'scm:git:git@github.com:m9aertner/PBKDF2.git'
+                   developerConnection 'scm:git:git@github.com:m9aertner/PBKDF2.git'
+               }
+
+               licenses {
+                   license {
+                       name 'GNU Lesser General Public License (LGPL), Version 2.1'
+                       url 'http://www.gnu.org/licenses/lgpl-2.1'
+                       distribution 'repo'
+                   }   
+               }
+
+               developers {
+                   developer {
+                       id 'm9aertner'
+                       name 'Matthias Gaertner'
+                   }
+               }
+           }
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+test {
+    // Define to false to exclude testRFC6070_4
+    systemProperties 'pbkdf2.run.lengthy.test': 'true'
+}
+
+// For the signing process, create a gradle.properties file in %USERPROFILE%\.gradle with content: 
+//
+// signing.keyId=617898B7
+// signing.password=********************
+// signing.secretKeyRingFile=C:/****/****/secring.gpg
+//
+// sonatypeUsername=********************
+// sonatypePassword=********************
+//
+// then call "gradle uploadArchives"
