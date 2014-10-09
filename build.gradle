@@ -21,6 +21,10 @@ jar {
     }
 }
 
+task noLintJavaDoc(type: Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from 'build/docs/javadoc'
