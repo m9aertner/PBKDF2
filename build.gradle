@@ -42,13 +42,18 @@ signing {
     sign configurations.archives
 }
 
+// travis has no %USERPROFILE%\.gradle\gradle.properties file, so be careful
+// Thanks to http://stackoverflow.com/a/26104997
+def userName = hasProperty('sonatypeUsername') ? sonatypeUsername : System.getenv('sonatypeUsername')
+def password = hasProperty('sonatypePassword') ? sonatypePassword : System.getenv('sonatypePassword')
+
 uploadArchives {
     repositories {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-              authentication(userName: sonatypeUsername, password: sonatypePassword)
+              authentication(userName: userName, password: password)
             }
 
             pom.project {
