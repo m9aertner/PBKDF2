@@ -1,7 +1,7 @@
 // Gradle Build File
 // http://www.gradle.org
 //
-// For details on uploading to central, see Yennick Trevels excellent write-up at 
+// For details on uploading to central, see Yennick Trevels excellent write-up at
 // http://yennicktrevels.com/blog/2013/10/11/automated-gradle-project-deployment-to-sonatype-oss-repository/
 
 apply plugin: 'java'
@@ -38,51 +38,51 @@ artifacts {
     archives sourcesJar
 }
 
-signing {
-    sign configurations.archives
-}
+// Only provide signing and upload when respective (local) configuration is present
+// Locally, this is defined in %USERPROFILE%\.gradle\gradle.properties
+if( hasProperty('sonatypeUsername') ) {
 
-// travis has no %USERPROFILE%\.gradle\gradle.properties file, so be careful
-// Thanks to http://stackoverflow.com/a/26104997
-def userName = hasProperty('sonatypeUsername') ? sonatypeUsername : System.getenv('sonatypeUsername')
-def password = hasProperty('sonatypePassword') ? sonatypePassword : System.getenv('sonatypePassword')
+    signing {
+        sign configurations.archives
+    }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-              authentication(userName: userName, password: password)
-            }
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                  authentication(userName: sonatypeUsername, password: sonatypePassword)
+                }
 
-            pom.project {
-               name 'PBKDF2'
-               packaging 'jar'
-               description 'A free Java implementation of RFC 2898 / PKCS#5 PBKDF2'
-               url 'http://www.rtner.de/software/PBKDF2.html'
+                pom.project {
+                   name 'PBKDF2'
+                   packaging 'jar'
+                   description 'A free Java implementation of RFC 2898 / PKCS#5 PBKDF2'
+                   url 'http://www.rtner.de/software/PBKDF2.html'
 
-               scm {
-                   url 'git@github.com:m9aertner/PBKDF2.git'
-                   connection 'scm:git:git@github.com:m9aertner/PBKDF2.git'
-                   developerConnection 'scm:git:git@github.com:m9aertner/PBKDF2.git'
-               }
+                   scm {
+                       url 'git@github.com:m9aertner/PBKDF2.git'
+                       connection 'scm:git:git@github.com:m9aertner/PBKDF2.git'
+                       developerConnection 'scm:git:git@github.com:m9aertner/PBKDF2.git'
+                   }
 
-               licenses {
-                   license {
-                       name 'GNU Lesser General Public License (LGPL), Version 2.1'
-                       url 'http://www.gnu.org/licenses/lgpl-2.1'
-                       distribution 'repo'
-                   }   
-               }
+                   licenses {
+                       license {
+                           name 'GNU Lesser General Public License (LGPL), Version 2.1'
+                           url 'http://www.gnu.org/licenses/lgpl-2.1'
+                           distribution 'repo'
+                       }
+                   }
 
-               developers {
-                   developer {
-                       id 'm9aertner'
-                       name 'Matthias Gaertner'
+                   developers {
+                       developer {
+                           id 'm9aertner'
+                           name 'Matthias Gaertner'
+                       }
                    }
                }
-           }
+            }
         }
     }
 }
@@ -100,7 +100,7 @@ test {
     systemProperties 'pbkdf2.run.lengthy.test': 'true'
 }
 
-// For the signing process, create a gradle.properties file in %USERPROFILE%\.gradle with content: 
+// For the signing process, create a gradle.properties file in %USERPROFILE%\.gradle with content:
 //
 // signing.keyId=617898B7
 // signing.password=********************
