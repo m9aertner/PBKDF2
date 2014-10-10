@@ -1,36 +1,40 @@
+/*
+ * A free Java implementation of Password Based Key Derivation Function 2 as
+ * defined by RFC 2898. Copyright 2007, 2014, Matthias G&auml;rtner
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package de.rtner.security.auth.spi;
 
 import de.rtner.misc.BinTools;
 
 /**
+ * Hexadecimal PBKDF2 parameter encoder/decoder.
  * <p>
- * A free Java implementation of Password Based Key Derivation Function 2 as
- * defined by RFC 2898. Copyright (c) 2007 Matthias G&auml;rtner
- * </p>
- * <p>
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
- * </p>
- * <p>
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- * </p>
- * <p>
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- * </p>
- * <p>
- * For Details, see <a
- * href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a>.
- * </p>
- * 
+ * This formatter encodes/decodes Strings that consist of
+ * <ol>
+ * <li>hex-encoded salt bytes</li>
+ * <li>colon (':')</li>
+ * <li>iteration count, positive decimal integer</li>
+ * <li>colon (':')</li>
+ * <li>derived key bytes</li>
+ * </ol>
+ *
  * @author Matthias G&auml;rtner
- * @version 1.0
  */
 public class PBKDF2HexFormatter implements PBKDF2Formatter
 {

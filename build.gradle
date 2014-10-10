@@ -10,7 +10,7 @@ apply plugin: 'signing'
 
 group = 'de.rtner'
 sourceCompatibility = 1.6
-version = '1.0.6'
+version = '1.0.7'
 
 jar {
     manifest {
@@ -19,10 +19,6 @@ jar {
                    'Main-Class': 'de.rtner.security.auth.spi.PBKDF2Engine',
                    'url': 'http://www.rtner.de/software/PBKDF2.html'
     }
-}
-
-task noLintJavaDoc(type: Javadoc) {
-    options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -100,8 +96,8 @@ dependencies {
 }
 
 test {
-    // Define to false to exclude testRFC6070_4
-    systemProperties 'pbkdf2.run.lengthy.test': 'true'
+    // Define to true to include ~ 30-second unit test testRFC6070_4
+    systemProperties 'pbkdf2.run.lengthy.test': 'false'
 }
 
 // For the signing process, create a gradle.properties file in %USERPROFILE%\.gradle with content:
