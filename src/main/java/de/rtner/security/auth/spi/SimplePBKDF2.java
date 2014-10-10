@@ -70,8 +70,8 @@ public class SimplePBKDF2 extends PBKDF2Engine {
 	 *
 	 * @param saltSize
 	 *            Salt size.
-	 * @param parameters
-	 *            Parameters object.
+	 * @param iterationCount
+	 *            Iteration count.
 	 */
 	public SimplePBKDF2(int saltSize, int iterationCount) {
 		this(saltSize, new PBKDF2Parameters("HmacSHA1", "ISO-8859-1",
@@ -98,6 +98,11 @@ public class SimplePBKDF2 extends PBKDF2Engine {
 		return saltSize;
 	}
 
+	/**
+	 * Set the desired salt size.
+	 *
+	 * @param saltSize Must be positive. Zero or less are rejected.
+	 */
 	public void setSaltSize(int saltSize) {
 		if( saltSize <= 0 ) {
 			throw new IllegalArgumentException("Salt size must be positive.");
