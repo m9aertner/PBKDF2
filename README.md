@@ -8,6 +8,11 @@ A free Java implementation of RFC 2898 / PKCS#5 PBKDF2
 Recent History
 ==============
 
+## v1.0.7 10Oct2014
+* Connected to [Travis CI](https://travis-ci.org) 
+* ![alt text](https://travis-ci.org/m9aertner/PBKDF2.svg?branch=master "Travis CI Status")
+* No non-comment code changes, not published.
+
 ## v1.0.6 08Oct2014
 * Main code *unchanged*
 * Checking RFC 6070 values via JUnit tests now
