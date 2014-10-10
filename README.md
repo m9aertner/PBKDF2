@@ -8,6 +8,10 @@ A free Java implementation of RFC 2898 / PKCS#5 PBKDF2
 Recent History
 ==============
 
+## v1.1.0 11Oct2014
+* Added `SimplePBKDF2` convenience class
+* Not published.
+
 ## v1.0.7 10Oct2014
 * Connected to [Travis CI](https://travis-ci.org) 
 * [![Build Status](https://travis-ci.org/m9aertner/PBKDF2.svg?branch=master)](https://travis-ci.org/m9aertner/PBKDF2)
@@ -33,6 +37,17 @@ Recent History
 
 Sample Use
 ==========
+
+## Simple API
+
+```java
+// Salt 8 bytes SHA1PRNG, HmacSHA1, 1000 iterations, ISO-8859-1
+String s = new SimplePBKDF2().deriveKeyFormatted("password");
+// s === "CCD16F76AF3DE30A:1000:B53849A7E20883C77618D3AD16269F98BC4DCA19"
+boolean ok = new SimplePBKDF2().verifyKeyFormatted(s, "password");
+```
+
+## DIY
 
 ```java
 byte[] salt = new byte[8];
