@@ -10,7 +10,7 @@ Recent History
 
 ## v1.0.7 10Oct2014
 * Connected to [Travis CI](https://travis-ci.org) 
-* ![alt text](https://travis-ci.org/m9aertner/PBKDF2.svg?branch=master "Travis CI Status")
+* [![Build Status](https://travis-ci.org/m9aertner/PBKDF2.svg?branch=master)](https://travis-ci.org/m9aertner/PBKDF2)
 * No non-comment code changes, not published.
 
 ## v1.0.6 08Oct2014
