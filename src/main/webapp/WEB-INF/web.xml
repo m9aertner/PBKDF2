@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<web-app>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/hello.jsp</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>manager</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
+
+    <security-role>
+        <role-name>manager</role-name>
+    </security-role>
+
+</web-app>

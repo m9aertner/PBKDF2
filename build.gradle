@@ -12,6 +12,8 @@ group = 'de.rtner'
 sourceCompatibility = 1.6
 version = '1.1.0'
 
+sourceSets.main.java.srcDirs = [ 'src/main/java', 'src/jboss/java' ]
+
 jar {
     manifest {
         attributes 'Implementation-Title': 'de.rtner.PBKDF2',
@@ -92,6 +94,11 @@ repositories {
 }
 
 dependencies {
+    // Picketbox: JBoss Security for SaltedDatabaseServerLoginModule
+    compile group: 'org.picketbox', name: 'picketbox', version: '4.+'
+    // Transitive undeclared dependency in Picketbox: org.jboss.logging.MessageBundle
+    compile group: 'org.jboss.logging', name: 'jboss-logging', version: '[3.1,)'
+    // JUnit
     testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 

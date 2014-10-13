@@ -8,9 +8,10 @@ A free Java implementation of RFC 2898 / PKCS#5 PBKDF2
 Recent History
 ==============
 
-## v1.1.0 11Oct2014
+## v1.1.0 14Oct2014
 * Added `SimplePBKDF2` convenience class
-* Not published.
+* Updated `SaltedDatabaseServerLoginModule` to work with [WildFly8](http://www.wildfly.org/)
+* See [README-WildFly8.md](README-WildFly8.md) for configuration instructions via provided sample Web Application `PBKDF2-Sample-1.1.0.war`.   
 
 ## v1.0.7 10Oct2014
 * Connected to [Travis CI](https://travis-ci.org) 
@@ -67,10 +68,10 @@ Dependency References
 <dependency>
     <groupId>de.rtner</groupId>
     <artifactId>PBKDF2</artifactId>
-    <version>1.0.6</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
 ## Gradle
 
-`'de.rtner:PBKDF2:1.0.6'`
+`'de.rtner:PBKDF2:1.1.0'`

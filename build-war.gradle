@@ -1,0 +1,20 @@
+// Gradle Build File
+// http://www.gradle.org
+//
+// Create Sample WAR file
+//   PBKDF2-Sample-1.x.y.war
+// gradle -b build-war.gradle war
+
+apply plugin: 'war'
+
+version = '1.1.0'
+
+war {
+    appendix = 'Sample'
+
+    // The WAR is all self-contained, with code in JSP (for demonstration
+    // purposes only - do not do this at home!). The point is that the WAR
+    // does not need access to the PBKDF2 JAR or its dependencies.
+    // With this setting, only JSP and XML content remains in the WAR. 
+    classpath = []
+}
