@@ -95,11 +95,11 @@ repositories {
 
 dependencies {
     // Picketbox: JBoss Security for SaltedDatabaseServerLoginModule
-    compile group: 'org.picketbox', name: 'picketbox', version: '4.+'
+    compile group: 'org.picketbox', name: 'picketbox', version: '4.0.21.Final'
     // Transitive undeclared dependency in Picketbox: org.jboss.logging.MessageBundle
     compile group: 'org.jboss.logging', name: 'jboss-logging', version: '[3.1,)'
     // JUnit
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 test {
