@@ -10,9 +10,14 @@ apply plugin: 'signing'
 
 group = 'de.rtner'
 sourceCompatibility = 1.6
-version = '1.1.0'
+version = '1.1.1'
+
+configurations {
+    provided
+}
 
 sourceSets.main.java.srcDirs = [ 'src/main/java', 'src/jboss/java' ]
+sourceSets.main.compileClasspath += configurations.provided
 
 jar {
     manifest {
@@ -21,6 +26,10 @@ jar {
                    'Main-Class': 'de.rtner.security.auth.spi.PBKDF2Engine',
                    'url': 'http://www.rtner.de/software/PBKDF2.html'
     }
+}
+
+javadoc {
+    classpath += configurations.provided
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -53,8 +62,9 @@ if( hasProperty('sonatypeUsername') ) {
             mavenDeployer {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
+                // repository(url: "file://localhost/test-repo/")
                 repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                  authentication(userName: sonatypeUsername, password: sonatypePassword)
+                   authentication(userName: sonatypeUsername, password: sonatypePassword)
                 }
 
                 pom.project {
@@ -95,11 +105,12 @@ repositories {
 
 dependencies {
     // Picketbox: JBoss Security for SaltedDatabaseServerLoginModule
-    compile group: 'org.picketbox', name: 'picketbox', version: '4.0.21.Final'
-    // Transitive undeclared dependency in Picketbox: org.jboss.logging.MessageBundle
-    compile group: 'org.jboss.logging', name: 'jboss-logging', version: '[3.1,)'
+    compile 'org.picketbox:picketbox:4.0.21.Final'
+    // Undeclared dependency in Picketbox: org.jboss.logging.MessageBundle
+    // We do not want this dependency to show up in our pom, so we go "provided"
+    provided 'org.jboss.logging:jboss-logging:3.1.4.GA'
     // JUnit
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile 'junit:junit:4.12'
 }
 
 test {

@@ -8,13 +8,21 @@ A free Java implementation of RFC 2898 / PKCS#5 PBKDF2
 Recent History
 ==============
 
+## v1.1.1 14Jun2015
+* Issues resolved
+ * [Unable to resolve dependencies due to + sign in version number](https://github.com/m9aertner/PBKDF2/issues/2)
+ * Prevented undeclared dependency in Picketbox on "org.jboss.logging", required for clean compile, from appearing in our POM.
+* Checked that `SaltedDatabaseServerLoginModule` continues to work with [WildFly9](http://www.wildfly.org/)
+ * See [README-WildFly9.md](README-WildFly9.md), sample [Web Application](http://www.rtner.de/software/PBKDF2-Sample-1.1.0.war) remains unchanged.
+* No code change.
+
 ## v1.1.0 14Oct2014
 * Added `SimplePBKDF2` convenience class
 * Updated `SaltedDatabaseServerLoginModule` to work with [WildFly8](http://www.wildfly.org/)
-* See [README-WildFly8.md](README-WildFly8.md) for configuration instructions via provided sample Web Application `PBKDF2-Sample-1.1.0.war`.   
+* See [README-WildFly8.md](README-WildFly8.md) for configuration instructions via provided sample Web Application `PBKDF2-Sample-1.1.0.war`.
 
 ## v1.0.7 10Oct2014
-* Connected to [Travis CI](https://travis-ci.org) 
+* Connected to [Travis CI](https://travis-ci.org)
 * [![Build Status](https://travis-ci.org/m9aertner/PBKDF2.svg?branch=master)](https://travis-ci.org/m9aertner/PBKDF2)
 * No non-comment code changes, not published.
 
@@ -28,7 +36,7 @@ Recent History
  * Need to get this working with WildFly 8.1 first...
 
 ## v1.0.5 30Jun2011
-* Added test program for RFC 6070 test vector #6. No code change. 
+* Added test program for RFC 6070 test vector #6. No code change.
 
 ## v1.0.3
 * Added JBoss `SaltedDatabaseServerLoginModule`
@@ -68,10 +76,10 @@ Dependency References
 <dependency>
     <groupId>de.rtner</groupId>
     <artifactId>PBKDF2</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
 ## Gradle
 
-`'de.rtner:PBKDF2:1.1.0'`
+`'de.rtner:PBKDF2:1.1.1'`
