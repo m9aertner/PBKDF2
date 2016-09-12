@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 /**
  * This <b>Password Based Key Derivation Function 2</b> implementation.
@@ -332,13 +333,16 @@ public class PBKDF2Engine implements PBKDF2
 
     /**
      * Convenience client function. Convert supplied password with random 8-byte
-     * salt and 1000 iterations using HMacSHA1. Assume that password is in
+     * salt and 1000 iterations (default) using HMacSHA1. Assume that password is in
      * ISO-8559-1 encoding. Output result as
      * &quot;Salt:iteration-count:PBKDF2&quot; with binary data in hexadecimal
      * encoding.
-     *
+     * <p>
      * Example: Password &quot;password&quot; (without the quotes) leads to
      * 48290A0B96C426C3:1000:973899B1D4AFEB3ED371060D0797E0EE0142BD04
+     * <p>
+     * The iteration count is configurable. In verification mode, the iteration
+     * count supplied in the candidate string must be no less than the 
      *
      * @param args
      *            Supply the password as argument.
@@ -354,7 +358,13 @@ public class PBKDF2Engine implements PBKDF2
         String password = "password";
         String candidate = null;
         PBKDF2Formatter formatter = new PBKDF2HexFormatter();
+        int iterations = 1000;
 
+        if (args.length >= 2 && args[0].equals("-i"))
+        {
+            iterations = Integer.parseInt(args[1]);
+            args = Arrays.copyOfRange(args, 2, args.length);
+        }
         if (args.length >= 1)
         {
             password = args[0];
@@ -369,7 +379,6 @@ public class PBKDF2Engine implements PBKDF2
             SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
             byte[] salt = new byte[8];
             sr.nextBytes(salt);
-            int iterations = 1000;
             PBKDF2Parameters p = new PBKDF2Parameters("HmacSHA1", "ISO-8859-1",
                     salt, iterations);
             PBKDF2Engine e = new PBKDF2Engine(p);
@@ -390,7 +399,7 @@ public class PBKDF2Engine implements PBKDF2
                                 + candidate + "\")");
             }
             PBKDF2Engine e = new PBKDF2Engine(p);
-            boolean verifyOK = e.verifyKey(password);
+            boolean verifyOK = (p.getIterationCount() >= iterations) && e.verifyKey(password);
             System.out.println(verifyOK ? "OK" : "FAIL");
             System.exit(verifyOK ? 0 : 1);
         }

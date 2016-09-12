@@ -8,6 +8,11 @@ A free Java implementation of RFC 2898 / PKCS#5 PBKDF2
 Recent History
 ==============
 
+## v1.1.2 12Sep2016
+* Checked that `SaltedDatabaseServerLoginModule` continues to work with [WildFly10](http://www.wildfly.org/)
+ * See [README-WildFly10.md](README-WildFly10.md), sample [Web Application](http://www.rtner.de/software/PBKDF2-Sample-1.1.0.war) remains unchanged.
+* Minor code change to "main" function: option "-i <number>" added to specify _desired_ (create mode) or _minimal_ (verification mode) iteration count on the `PBKDF2Engine` command line. Default remains at 1000.
+
 ## v1.1.1 14Jun2015
 * Issues resolved
  * [Unable to resolve dependencies due to + sign in version number](https://github.com/m9aertner/PBKDF2/issues/2)
@@ -67,6 +72,31 @@ System.out.println(BinTools.bin2hex(dk));
 // Result is 64-character Base64 value. Note SHA256, different from RFC 6070.
 ```
 
+## Command line
+
+```
+> java -jar PBKDF2-1.1.2.jar "Hello World!"
+AA2C42862321D0A5:1000:296C7F0EA94D0E79D6771D74158860608E8C7F73
+
+> java -jar PBKDF2-1.1.2.jar -i 12288 password
+082EFFA9F93CE8BB:12288:C24AC4382DFF88284F1B8338C3CCD95E3221B900
+
+> java -jar PBKDF2-1.1.2.jar -i 12288 password 082EFFA9F93CE8BB:12288:C24AC4382DFF88284F1B8338C3CCD95E3221B900
+OK
+
+> echo %ERRORLEVEL%
+0
+
+> java -jar PBKDF2-1.1.2.jar -i 12289 password 082EFFA9F93CE8BB:12288:C24AC4382DFF88284F1B8338C3CCD95E3221B900
+FAIL
+
+> java -jar PBKDF2-1.1.2.jar -i 12288 password 082EFFA9F93CE8BB:12288:C24AC4382DFF88284F1B8338C3CCD95E3221B999
+FAIL
+
+> echo %ERRORLEVEL%
+1
+```
+
 Dependency References
 =====================
 
@@ -76,10 +106,21 @@ Dependency References
 <dependency>
     <groupId>de.rtner</groupId>
     <artifactId>PBKDF2</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
 ## Gradle
 
-`'de.rtner:PBKDF2:1.1.1'`
+`'de.rtner:PBKDF2:1.1.2'`
+
+
+Digital Signature
+=================
+
+The version tag is signed with GnuPG keypair [0x6FFA6075617898B7](https://pgp.mit.edu/pks/lookup?search=0x6FFA6075617898B7)
+
+```
+pub  2048R/617898B7 2014-09-24 Matthias Gaertner (2014/09) <mgaert@web.de>
+     Fingerprint=E510 7F88 F901 EEAF 622A  F1DE 6FFA 6075 6178 98B7
+```
