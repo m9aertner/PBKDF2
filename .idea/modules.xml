@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/PBKDF2_FORK.iml" filepath="$PROJECT_DIR$/PBKDF2_FORK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SaltedDatabaseLoginModule/SaltedDatabaseLoginModule.iml" filepath="$PROJECT_DIR$/SaltedDatabaseLoginModule/SaltedDatabaseLoginModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+    </modules>
+  </component>
+</project>
+
