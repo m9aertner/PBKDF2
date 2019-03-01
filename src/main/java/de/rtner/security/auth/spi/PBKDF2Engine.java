@@ -160,14 +160,12 @@ public class PBKDF2Engine implements PBKDF2
         {
             return false;
         }
+        int z = 0;
         for (int i = 0; i < inputKey.length; i++)
         {
-            if (inputKey[i] != referenceKey[i])
-            {
-                return false;
-            }
+            z |= (inputKey[i] ^ referenceKey[i]);
         }
-        return true;
+        return (z == 0);
     }
 
     /**
@@ -342,12 +340,12 @@ public class PBKDF2Engine implements PBKDF2
      * 48290A0B96C426C3:1000:973899B1D4AFEB3ED371060D0797E0EE0142BD04
      * <p>
      * The iteration count is configurable. In verification mode, the iteration
-     * count supplied in the candidate string must be no less than the 
+     * count supplied in the candidate string must be no less than the
      *
      * @param args
      *            Supply the password as argument.
      * @throws IOException
-     *            apparently declared, but never thrown 
+     *            apparently declared, but never thrown
      * @throws NoSuchAlgorithmException
      *            Thrown if underlying crypto library does not support
      *            requested algorithms (SHA1PRNG, HmacSHA1).
