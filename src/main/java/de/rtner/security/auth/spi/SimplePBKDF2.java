@@ -156,6 +156,7 @@ public class SimplePBKDF2 extends PBKDF2Engine {
 		PBKDF2Parameters p = getParameters();
 		PBKDF2Parameters q = new PBKDF2Parameters();
 		q.hashAlgorithm = p.hashAlgorithm;
+		q.hashCharset  = p.hashCharset;
 		boolean verifyOK = false;
 		if (!getFormatter().fromString(q, formatted)) {
 			try {

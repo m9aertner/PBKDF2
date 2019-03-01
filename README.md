@@ -8,6 +8,10 @@ A free Java implementation of RFC 2898 / PKCS#5 PBKDF2
 Recent History
 ==============
 
+## v1.1.3 01Mar2019
+* Addressed Issue #7 Checking password is not constant time algorithm
+* Addressed Issue #8 SimplePBKDF2 fails with multibyte chars
+
 ## v1.1.2 12Sep2016
 * Checked that `SaltedDatabaseServerLoginModule` continues to work with [WildFly10](http://www.wildfly.org/)
  * See [README-WildFly10.md](README-WildFly10.md), sample [Web Application](http://www.rtner.de/software/PBKDF2-Sample-1.1.0.war) remains unchanged.
