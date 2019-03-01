@@ -20,7 +20,6 @@
 
 package de.rtner.security.auth.spi;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -32,16 +31,14 @@ public class MultibyteCharsTest {
 
 	@Test
 	public void testPbkdf2mb() {
-		String pwd = "santiaguiño";
-		assertEquals(pwd, "santiagui\u00F1o"); // U+00F1 ñ 195 177 LATIN SMALL LETTER N WITH TILDE
+		String pwd = "santiagui\u00F1o"; // U+00F1 195 177 LATIN SMALL LETTER N WITH TILDE
 		String hash = new SimplePBKDF2().deriveKeyFormatted(pwd);
 		assertTrue(new SimplePBKDF2().verifyKeyFormatted(hash, pwd));
 	}
 
 	@Test
 	public void testPbkdf2mbUTF8() {
-		String pwd = "santiaguiño";
-		assertEquals(pwd, "santiagui\u00F1o"); // U+00F1 ñ 195 177 LATIN SMALL LETTER N WITH TILDE
+		String pwd = "santiagui\u00F1o"; // U+00F1 195 177 LATIN SMALL LETTER N WITH TILDE
 		SimplePBKDF2 kdf = new SimplePBKDF2();
 		kdf.setParameters(new PBKDF2Parameters("HmacSHA1", "UTF-8", null, 1000));
 		String hash = kdf.deriveKeyFormatted(pwd);
@@ -50,8 +47,7 @@ public class MultibyteCharsTest {
 
 	@Test
 	public void testPbkdf2AumlUTF8() {
-		String pwd = "Matthias Gärtner";
-		assertEquals(pwd, "Matthias G\u00E4rtner"); // Should have tested with my own name! (&auml;)
+		String pwd = "Matthias G\u00E4rtner"; // Should have tested with my own name! (&auml;)
 		SimplePBKDF2 kdf = new SimplePBKDF2();
 		kdf.setParameters(new PBKDF2Parameters("HmacSHA1", "UTF-8", null, 1000));
 		String hash = kdf.deriveKeyFormatted(pwd);

@@ -8,9 +8,12 @@ A free Java implementation of RFC 2898 / PKCS#5 PBKDF2
 Recent History
 ==============
 
-## v1.1.3 01Mar2019
+## v1.1.4 01Mar2019
 * Addressed Issue #7 Checking password is not constant time algorithm
 * Addressed Issue #8 SimplePBKDF2 fails with multibyte chars
+
+## v1.1.3 01Mar2019
+* Travis complains about unit test characters. Not publishing this version.
 
 ## v1.1.2 12Sep2016
 * Checked that `SaltedDatabaseServerLoginModule` continues to work with [WildFly10](http://www.wildfly.org/)
@@ -79,22 +82,22 @@ System.out.println(BinTools.bin2hex(dk));
 ## Command line
 
 ```
-> java -jar PBKDF2-1.1.2.jar "Hello World!"
+> java -jar PBKDF2-1.1.4.jar "Hello World!"
 AA2C42862321D0A5:1000:296C7F0EA94D0E79D6771D74158860608E8C7F73
 
-> java -jar PBKDF2-1.1.2.jar -i 12288 password
+> java -jar PBKDF2-1.1.4.jar -i 12288 password
 082EFFA9F93CE8BB:12288:C24AC4382DFF88284F1B8338C3CCD95E3221B900
 
-> java -jar PBKDF2-1.1.2.jar -i 12288 password 082EFFA9F93CE8BB:12288:C24AC4382DFF88284F1B8338C3CCD95E3221B900
+> java -jar PBKDF2-1.1.4.jar -i 12288 password 082EFFA9F93CE8BB:12288:C24AC4382DFF88284F1B8338C3CCD95E3221B900
 OK
 
 > echo %ERRORLEVEL%
 0
 
-> java -jar PBKDF2-1.1.2.jar -i 12289 password 082EFFA9F93CE8BB:12288:C24AC4382DFF88284F1B8338C3CCD95E3221B900
+> java -jar PBKDF2-1.1.4.jar -i 12289 password 082EFFA9F93CE8BB:12288:C24AC4382DFF88284F1B8338C3CCD95E3221B900
 FAIL
 
-> java -jar PBKDF2-1.1.2.jar -i 12288 password 082EFFA9F93CE8BB:12288:C24AC4382DFF88284F1B8338C3CCD95E3221B999
+> java -jar PBKDF2-1.1.4.jar -i 12288 password 082EFFA9F93CE8BB:12288:C24AC4382DFF88284F1B8338C3CCD95E3221B999
 FAIL
 
 > echo %ERRORLEVEL%
@@ -110,13 +113,13 @@ Dependency References
 <dependency>
     <groupId>de.rtner</groupId>
     <artifactId>PBKDF2</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.4</version>
 </dependency>
 ```
 
 ## Gradle
 
-`'de.rtner:PBKDF2:1.1.2'`
+`'de.rtner:PBKDF2:1.1.4'`
 
 
 Digital Signature
